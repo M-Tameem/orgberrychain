@@ -20,7 +20,7 @@ const Login = () => {
   const { toast } = useToast();
   const [demoRole, setDemoRole] = useState('farmer');
 
-  const API_BASE_URL = 'http://localhost:3001';
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const demoUsers: Record<string, { username: string; password: string; chaincode_alias: string; role: string }> = {
     farmer: { username: 'testf1', password: 'testf1', chaincode_alias: 'DemoFarmer1', role: 'farmer' },
