@@ -20,8 +20,22 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const defaultAllowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:8080',
+  'http://localhost:3001',
+  'https://strawbchain-k47hg0wq3-m-tameems-projects.vercel.app',
+];
+
+const configuredOrigins = (process.env.CORS_ORIGIN || '')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+const allowedOrigins = configuredOrigins.length > 0 ? configuredOrigins : defaultAllowedOrigins;
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:3001'], // include all frontend origins
+  origin: allowedOrigins,
   credentials: true,
 };
 
