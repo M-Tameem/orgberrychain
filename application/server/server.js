@@ -25,6 +25,8 @@ const defaultAllowedOrigins = [
   'http://localhost:8080',
   'http://localhost:3001',
   'https://strawbchain-k47hg0wq3-m-tameems-projects.vercel.app',
+  'https://strawbchain.vercel.app',
+  'https://www.strawbchain.vercel.app',
 ];
 
 const configuredOrigins = (process.env.CORS_ORIGIN || '')

@@ -21,7 +21,7 @@ RATE_LIMIT_MAX_REQUESTS=100
 
 # CORS Configuration
 # Comma-separated list of allowed origins for CORS requests
-CORS_ORIGIN=http://localhost:3000,http://localhost:8080,http://localhost:3001,https://strawbchain-k47hg0wq3-m-tameems-projects.vercel.app
+CORS_ORIGIN=http://localhost:3000,http://localhost:8080,http://localhost:3001,https://strawbchain-k47hg0wq3-m-tameems-projects.vercel.app,https://strawbchain.vercel.app,https://www.strawbchain.vercel.app
 
 # Logging
 LOG_LEVEL=info
