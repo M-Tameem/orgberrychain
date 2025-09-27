@@ -6,7 +6,35 @@
 import { useAuth } from '@/contexts/AuthContext';
 
 // Update this to point to your local backend server
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const normalizeBaseUrl = (rawValue?: string) => {
+  if (!rawValue) {
+    throw new Error('VITE_API_BASE_URL is not defined.');
+  }
+
+  const trimmedValue = rawValue.trim();
+
+  if (!trimmedValue) {
+    throw new Error('VITE_API_BASE_URL is empty.');
+  }
+
+  const valueWithScheme = /^https?:\/\//i.test(trimmedValue)
+    ? trimmedValue
+    : `https://${trimmedValue}`;
+
+  // Remove trailing slashes to keep endpoint concatenation predictable
+  const normalizedValue = valueWithScheme.replace(/\/+$/, '');
+
+  try {
+    // Throws if the URL is invalid
+    new URL(normalizedValue);
+  } catch (error) {
+    throw new Error(`VITE_API_BASE_URL is not a valid URL: ${trimmedValue}`);
+  }
+
+  return normalizedValue;
+};
+
+export const API_BASE_URL = normalizeBaseUrl(import.meta.env.VITE_API_BASE_URL);
 
 interface ApiResponse<T> {
   data?: T;

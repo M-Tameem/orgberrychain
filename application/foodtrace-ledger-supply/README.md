@@ -64,6 +64,14 @@ This project is built with:
 - shadcn-ui
 - Tailwind CSS
 
+## Environment configuration
+
+Create a `.env` file in `application/foodtrace-ledger-supply` and ensure the API base URL includes the protocol (for example `https://strawbchain-production.up.railway.app`). The frontend will refuse to start if the value is missing or malformed.
+
+```
+VITE_API_BASE_URL=https://strawbchain-production.up.railway.app
+```
+
 ## How can I deploy this project?
 
 Simply open [Lovable](https://lovable.dev/projects/bb5dfebf-3577-4332-8f42-20a3b1d0d6f0) and click on Share -> Publish.
