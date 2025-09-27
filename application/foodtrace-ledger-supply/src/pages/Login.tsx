@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Leaf, TruckIcon, Building, ShieldCheck, Package } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { API_BASE_URL } from '@/services/api';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -19,8 +20,6 @@ const Login = () => {
   const { login } = useAuth();
   const { toast } = useToast();
   const [demoRole, setDemoRole] = useState('farmer');
-
-  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   const demoUsers: Record<string, { username: string; password: string; chaincode_alias: string; role: string }> = {
     farmer: { username: 'testf1', password: 'testf1', chaincode_alias: 'DemoFarmer1', role: 'farmer' },
