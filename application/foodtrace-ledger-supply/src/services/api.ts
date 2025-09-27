@@ -6,7 +6,7 @@
 import { useAuth } from '@/contexts/AuthContext';
 
 // Update this to point to your local backend server
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 interface ApiResponse<T> {
   data?: T;
