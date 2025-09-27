@@ -35,14 +35,49 @@ const configuredOrigins = (process.env.CORS_ORIGIN || '')
   .filter(Boolean);
 
 const allowedOrigins = configuredOrigins.length > 0 ? configuredOrigins : defaultAllowedOrigins;
+const allowedOriginsSet = new Set(allowedOrigins);
 
-const corsOptions = {
-  origin: allowedOrigins,
-  credentials: true,
+const corsOptionsDelegate = (req, callback) => {
+  const requestOrigin = req.header('Origin');
+
+  // Allow non CORS requests (e.g. curl/Postman) and same-origin calls
+  if (!requestOrigin) {
+    return callback(null, { origin: false });
+  }
+
+  if (allowedOriginsSet.has(requestOrigin)) {
+    return callback(null, {
+      origin: requestOrigin,
+      credentials: true,
+      optionsSuccessStatus: 204,
+    });
+  }
+
+  console.warn(`CORS: Blocked origin ${requestOrigin}`);
+  return callback(null, { origin: false });
 };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Handle preflight OPTIONS requests
+// Manually add CORS headers so that even error responses include them.
+app.use((req, res, next) => {
+  const requestOrigin = req.header('Origin');
+
+  if (requestOrigin && allowedOriginsSet.has(requestOrigin)) {
+    res.header('Access-Control-Allow-Origin', requestOrigin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+    res.header('Vary', 'Origin');
+
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+  }
+
+  next();
+});
+
+app.use(cors(corsOptionsDelegate));
+app.options('*', cors(corsOptionsDelegate)); // Handle preflight OPTIONS requests
 
 // Security middleware
 app.use(helmet());
