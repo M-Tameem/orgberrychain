@@ -5,7 +5,7 @@ Last modified by: Muhammad-Tameem Mughal
 Module Name:
 
 The chaincode module name is currently set to foodtrace.
-You generally do not need to change this — it is never exposed to end-users (including in development).
+You generally do not need to change this - it is never exposed to end-users (including in development).
 
 If you do need to change it (e.g. re-naming the repo/module):
 

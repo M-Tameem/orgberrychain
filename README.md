@@ -30,6 +30,28 @@ Typical flow of a shipment:
 5. Retailer receives the shipment and can optionally mark it as sold/consumed.
 6. At any point an admin may initiate a recall which propagates to all related shipments.
 
+## Setup (prerequisites include setting up a Kaleido network)
+
+```bash
+git clone https://github.com/M-Tameem/orgberrychain.git
+cd orgberrychain
+
+# Backend (BFF server)
+cd application/server
+cp ../../env-example.txt .env   # fill in Kaleido, JWT, and IPFS values
+npm install
+node start.js
+
+# Frontend
+cd ../foodtrace-ledger-supply
+npm install
+npm run build
+```
+
+See `env-example.txt` for all required environment variables.
+
+---
+
 For build and testing, run `go vet` and `go build` under `chaincode/`. To create the final bin file for upload to Kaleido, run:
 GOOS=linux GOARCH=amd64 go build -o foodtrace.bin
 
@@ -38,17 +60,16 @@ For the Node projects run `npm install` followed by `npm run build` (frontend) -
 For running, please ensure a .env file is placed in the 'application/server' directory, please see env-example.txt
 
 
-## Known bugs:
-The transform and create product functionality occasionally doesn't work - I couldn't figure out why unfortunately.
-While the code is optimized for usage with CouchDB, there is no config file option for it in Kaleido, which doesn't allow those optimizations to be utilized adequately.
+## IoT Sensor Endpoint
 
-## How to use the IoT Server endpoint:
-Currently, it isn't production ready, fully. What it does is traverse through the existing database, since it's supposed to have only one Distributor in the demo signup, and assigns the sensor to that Distributor's identity. Scaling this to a production level is relatively easy, however, without a dedicated IoT device, it does seem unnecessary to implement in full.
+Processes a shipment to the Distributor level, then run:
 
-To use the endpoint, process a shipment to the Distributor level
-Then, navigate to application/server and run "node test-sensor-logs.js <SHIP-ID>"
-When you attempt to distribute the shipment in full, it will load the stored coordinates and related data as submitted from the sensor, and will be otherwise immutable on the client side.
+```bash
+node test-sensor-logs.js <SHIP-ID>
+```
 
-## Common pitfalls during development:
-Kaleido is VERY specific with it's schema, do NOT, under any circumstance, use 'omitempty' in any of the Go structs, Kaleido will complain. This would not be an issue in a manual deployment
-Be super careful with losing your .db file during deployment, you will have to rebuild the Kaleido network from scratch to redeploy to Kaleido, as the db contains Kaleido network specific credentials.
+from `application/server`. When you distribute the shipment, stored sensor coordinates and related data will be loaded and remain immutable on the client side.
+
+---
+
+For development notes, known limitations, and Kaleido-specific pitfalls, see [DEVELOPMENT.md](DEVELOPMENT.md).
